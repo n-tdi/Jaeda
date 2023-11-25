@@ -4,9 +4,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import world.ntdi.jaeda.command.ReloadCommand;
@@ -31,37 +34,32 @@ public final class Jaeda extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent p_inventoryClickEvent) {
-        if (!(p_inventoryClickEvent.getWhoClicked() instanceof Player p_player)) {
+    public void onPickUp(InventoryCreativeEvent p_inventoryCreativeEvent) {
+        final ItemStack itemStack = p_inventoryCreativeEvent.getCursor();
+
+        if (itemStack.getAmount() < 64) {
             return;
         }
 
-        if (p_inventoryClickEvent.getClickedInventory().getType() != InventoryType.CREATIVE) {
-            return;
-        }
-
-        if (p_inventoryClickEvent.getAction() != InventoryAction.CLONE_STACK) {
+        if (!(p_inventoryCreativeEvent.getWhoClicked() instanceof Player p_player)) {
             return;
         }
 
         final List<String> blacklistedItemsList = m_config.getStringList(ConfigOptions.BLACKLISTED_ITEMS.toString());
-        final List<Material> blaclistedItemsMaterialList = blacklistedItemsList.stream()
+        final List<Material> blacklistedItemsMaterialList = blacklistedItemsList.stream()
                 .map(Material::valueOf)
                 .toList();
 
-        final ItemStack cursorItem = p_inventoryClickEvent.getCursor();
-        final ItemStack currentItem = p_inventoryClickEvent.getCurrentItem();
+        final ItemStack cursorItem = p_inventoryCreativeEvent.getCursor();
 
-        for (final Material material : blaclistedItemsMaterialList) {
-            if (currentItem.getType() == material || cursorItem.getType() == material) {
-                return;
-            }
+        if (blacklistedItemsMaterialList.contains(cursorItem.getType())) {
+            return;
         }
 
         final String webhookUrl = m_config.getString(ConfigOptions.DISCORD_WEBHOOK_URL.toString());
         final String username = p_player.getName();
         final String uuid = p_player.getUniqueId().toString();
-        final String item = cursorItem.getType().toString();
+        final String item = itemStack.getType().toString();
 
         final JaedaWebhook jaedaWebhook = new JaedaWebhook(webhookUrl, username, uuid, item);
         try {
