@@ -1,0 +1,6 @@
+# The url of the discord webhook
+discord-webhook-url: "webhook url here"
+
+# Items here will not be logged by the webhook
+blacklist-items:
+  - "DIRT"
