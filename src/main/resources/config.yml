@@ -2,5 +2,6 @@
 discord-webhook-url: "webhook url here"
 
 # Items here will not be logged by the webhook
+# Look here for a list of items, https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
 blacklist-items:
   - "DIRT"
