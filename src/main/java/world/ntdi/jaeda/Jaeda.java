@@ -1,15 +1,11 @@
 package world.ntdi.jaeda;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCreativeEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import world.ntdi.jaeda.command.ReloadCommand;
@@ -17,7 +13,6 @@ import world.ntdi.jaeda.config.Config;
 import world.ntdi.jaeda.config.ConfigOptions;
 import world.ntdi.jaeda.discord.JaedaWebhook;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
@@ -42,6 +37,10 @@ public final class Jaeda extends JavaPlugin implements Listener {
         }
 
         if (!(p_inventoryCreativeEvent.getWhoClicked() instanceof Player p_player)) {
+            return;
+        }
+
+        if (p_player.getGameMode() != GameMode.CREATIVE) {
             return;
         }
 
