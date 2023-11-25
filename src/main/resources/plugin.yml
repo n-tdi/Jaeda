@@ -6,3 +6,7 @@ prefix: Jaeda
 authors: [Ntdi]
 description: Log when a player duplicates items in the creative inventory
 website: ntdi.world
+commands:
+  jaeda:
+    permission: "is.op"
+    description: "jaeda help command"

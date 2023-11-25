@@ -12,4 +12,9 @@ public enum ConfigOptions {
     public String getName() {
         return p_name;
     }
+
+    @Override
+    public String toString() {
+        return p_name;
+    }
 }
